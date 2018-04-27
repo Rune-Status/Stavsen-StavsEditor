@@ -18,9 +18,20 @@ namespace RsUtil
   }
 
   template <typename T>
-    void SwapEndian(T& data)
+    void SwapEndian(T& r_data)
     {
+      union
+      {
+        T data;
+        RsByte bytes[sizeof(T)];
+      }input, output;
 
+      input.data = r_data;
+
+     for(size_t i = 0; i < sizeof(T); i++) 
+       output.bytes[i] = input.bytes[sizeof(T) - i - 1];
+
+      r_data = output.data;
     }
 
   template <typename T>
