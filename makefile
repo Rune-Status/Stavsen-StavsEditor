@@ -1,4 +1,4 @@
-OBJECTS = $(patsubst src/%.cpp, src/%.o, $(wildcard src/*.cpp))
+OBJECTS = $(patsubst src/%.cpp, src/.%.o, $(wildcard src/*.cpp))
 HEADERS = $(wildcard include/*.h) $(wildcard include/config_structs/*.h)
 
 OUTPUT_DIR = bin/
@@ -12,7 +12,7 @@ CXXFLAGS = -Wall -std=c++11 -I./include/
 program: $(OBJECTS) $(HEADERS)
 	@$(CXX) $(OBJECTS) $(CXXFLAGS) -o $(OUTPUT_DIR)$(EXE)
 
-src/%.o: src/%.cpp $(HEADERS)
+src/.%.o: src/%.cpp $(HEADERS)
 	@echo recompiling: $@
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
