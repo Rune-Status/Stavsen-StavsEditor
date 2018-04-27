@@ -1,4 +1,5 @@
 git-changes-notes
 
+*.swp
 *.o
 
