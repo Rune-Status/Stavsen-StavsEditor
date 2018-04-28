@@ -2,9 +2,7 @@
 
 #include <vector>
 
-#include "INonCopyable.h"
 #include "RsUtil.h"
-#include "RsConfig.h"
 
 #define READ_MODE 1
 #define WRITE_MODE 2
