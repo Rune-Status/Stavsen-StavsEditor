@@ -16,5 +16,5 @@ class Encoder
         r_ostream.write(reinterpret_cast<char*>(data), sizeof(T));
       }
 
-    void WriteString(std::string str, std::ostream& r_ostream);
+    void WriteString(std::string& str, std::ostream& r_ostream);
 };

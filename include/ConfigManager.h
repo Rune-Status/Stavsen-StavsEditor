@@ -12,6 +12,11 @@ class ConfigManager
     ConfigManager()
     {
       ItemOpHandler Handler;
+
+      std::vector<ItemConfig> items;
+      items.push_back(ItemConfig{});
+
+      Handler.Read(items);
     }
 };
 

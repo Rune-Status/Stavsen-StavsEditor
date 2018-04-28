@@ -6,5 +6,5 @@
 class ItemOpHandler : public OpHandler<ItemConfig> 
 {
   protected:
-    virtual void handle(RsUtil::RsByte op, ItemConfig& item) override {} //Test 
+    virtual void handle(RsUtil::RsByte op, ItemConfig& item) override;
 };
