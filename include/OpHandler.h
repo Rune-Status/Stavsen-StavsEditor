@@ -11,7 +11,7 @@
 #define WRITE_MODE 2
 
 template <typename T>
-class OpHandler : Decoder, Encoder
+class OpHandler : protected Decoder, protected Encoder
 {
   private:
     RsUtil::RsByte mode = READ_MODE;
@@ -46,10 +46,10 @@ class OpHandler : Decoder, Encoder
           return;
 
         if(this->mode == READ_MODE)
-        {}
+          this->ReadSome<D>(data, *(this->p_dataIStream));
 
         if(this->mode == WRITE_MODE)
-        {}
+          this->ReadSome<D>(data, *(this->p_dataIStream));
       }
 
     void ReadWriteString(std::string& str)

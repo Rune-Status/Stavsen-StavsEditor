@@ -7,7 +7,7 @@ EXE = a.exe
 CXX = g++
 CXXFLAGS = -Wall -std=c++11 -I./include/
 
-.PHONY: clean run
+.PHONY: clean clear run
 
 program: $(OBJECTS) $(HEADERS)
 	@$(CXX) $(OBJECTS) $(CXXFLAGS) -o $(OUTPUT_DIR)$(EXE)

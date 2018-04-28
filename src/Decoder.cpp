@@ -7,7 +7,7 @@ void Decoder::ReadString(std::string& str, std::istream& r_istream)
 
   while(character != RsUtil::StringTerminator)
   {
-    this->Read<RsUtil::RsByte>(character, r_istream);
+    this->ReadSome<RsUtil::RsByte>(character, r_istream);
     str.push_back(character);
   }
 

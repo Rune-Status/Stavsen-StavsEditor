@@ -9,7 +9,7 @@ class Encoder
 {
   public:
     template <typename T>
-      void Write(T data, std::ostream& r_ostream)
+      void WriteSome(T data, std::ostream& r_ostream)
       {
         RsUtil::FixEndian(data);
 

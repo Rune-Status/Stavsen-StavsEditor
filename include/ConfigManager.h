@@ -2,7 +2,6 @@
 
 #include "Decoder.h"
 #include "Encoder.h"
-
 #include "ItemOpHandler.h"
 
 class ConfigManager

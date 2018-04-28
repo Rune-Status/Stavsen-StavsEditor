@@ -9,7 +9,7 @@ class Decoder
 {
   public:
     template <typename T>
-      void Read(T& data, std::istream& r_istream)
+      void ReadSome(T& data, std::istream& r_istream)
       {
         r_istream.read(reinterpret_cast<char*>(data), sizeof(T));
 
