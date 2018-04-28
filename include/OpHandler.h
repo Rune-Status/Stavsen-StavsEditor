@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <iostream>
 
 #include "RsUtil.h"
 
@@ -13,23 +14,28 @@ class OpHandler
   private:
     RsUtil::RsByte mode = READ_MODE;
 
+    std::istream* p_indexIStream;
+    std::istream* p_dataIStream;
+
+    std::ostream* p_indexOStream;
+    std::ostream* p_dataOStream;
+
   protected:
-    /*
-      TODO(Stavsen): Figure out whether to pass T as
-                     reference, pointer or copy.
+    virtual void handle(RsUtil::RsByte, T&) = 0; 
 
-                     (references works but do we want to put everything on the stack? )
-
-                     (pointers are problematic because then OpHandler wont be independant 
-                      because we have to use the same kind of smartpointer as ConfigManager 
-                      + im not sure if passing the vector by reference increases reference count )
-    */
-    virtual void handle(RsUtil::RsByte, T) = 0; 
   public:
-    void Read(std::vector<T>& r_elements)
+    void SetInputStream(std::istream& indexStream, std::istream& dataStream)
     {
-      this->handle(3,r_elements.front());  //test code
+      this->p_indexIStream = indexStream;
+      this->p_dataIStream = dataStream;
     }
 
+    void SetOutputStream(std::ostream& indexStream, std::ostream& dataStream)
+    {
+      this->p_indexOStream = indexStream;
+      this->p_dataOStream = dataStream;
+    }
+
+    void Read(std::vector<T>& r_elements);
     void Write(std::vector<T>& r_elements);
 };
