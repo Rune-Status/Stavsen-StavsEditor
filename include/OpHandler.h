@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <iostream>
+#include <functional>
 
 #include "RsUtil.h"
 #include "Decoder.h"
@@ -49,19 +50,31 @@ class OpHandler : protected Decoder, protected Encoder
           this->ReadSome<D>(data, *(this->p_dataIStream));
 
         if(this->mode == WRITE_MODE)
-          this->ReadSome<D>(data, *(this->p_dataIStream));
+          this->WriteSome<D>(data, *(this->p_dataOStream));
       }
+
+    void ReadWrite(std::function<void()> read, std::function<void()> write)
+    {
+      if(!this->validateStreams())
+        return;
+
+      if(this->mode == READ_MODE)
+        read();
+
+      if(this->mode == WRITE_MODE)
+        write();
+    }
 
     void ReadWriteString(std::string& str)
     {
-        if(!this->validateStreams())
-          return;
+      if(!this->validateStreams())
+        return;
 
-        if(this->mode == READ_MODE)
-          this->ReadString(str,*(this->p_dataIStream));
+      if(this->mode == READ_MODE)
+        this->ReadString(str,*(this->p_dataIStream));
 
-        if(this->mode == WRITE_MODE)
-          this->WriteString(str,*(this->p_dataOStream));
+      if(this->mode == WRITE_MODE)
+        this->WriteString(str,*(this->p_dataOStream));
     }
 
   public:
