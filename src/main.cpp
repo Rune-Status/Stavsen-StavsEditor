@@ -1,10 +1,12 @@
 #include <iostream>
 
-#include <ConfigManager.h>
+#include "ItemOpHandler.h"
+#include "ItemConfig.h"
+#include "ConfigManager.h"
 
 int main()
 {
-  ConfigManager c;
+  ConfigManager<ItemOpHandler, ItemConfig> c;
 
   return 0;
 }

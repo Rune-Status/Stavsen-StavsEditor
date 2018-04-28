@@ -55,8 +55,8 @@ class OpHandler : protected Decoder, protected Encoder
 
     void ReadWrite(std::function<void()> read, std::function<void()> write)
     {
-      if(!this->validateStreams())
-        return;
+      //if(!this->validateStreams())
+        //return;
 
       if(this->mode == READ_MODE)
         read();

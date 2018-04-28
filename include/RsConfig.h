@@ -4,6 +4,7 @@
 
 struct RsConfig
 {
-  RsUtil::RsInt ID;
+  RsUtil::RsShort ID;
+  RsUtil::RsShort Offset;
 };
 

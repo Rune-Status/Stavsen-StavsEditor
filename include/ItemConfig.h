@@ -8,7 +8,7 @@
    TODO(Stavsen): Change member types to their actual 
    types in the cache.
  */
-struct ItemConfig : RsConfig
+struct ItemConfig : public RsConfig
 {
   std::string name = std::string("undefined");
   int modelID = 0;
