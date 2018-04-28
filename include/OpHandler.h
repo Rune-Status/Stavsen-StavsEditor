@@ -17,11 +17,11 @@ class OpHandler : protected Decoder, protected Encoder
   private:
     RsUtil::RsByte mode = READ_MODE;
 
-    std::istream* p_indexIStream;
-    std::istream* p_dataIStream;
+    std::istream* p_indexIStream = nullptr;
+    std::istream* p_dataIStream = nullptr;
 
-    std::ostream* p_indexOStream;
-    std::ostream* p_dataOStream;
+    std::ostream* p_indexOStream = nullptr;
+    std::ostream* p_dataOStream = nullptr;
 
     bool validateStreams()
     {
@@ -78,21 +78,30 @@ class OpHandler : protected Decoder, protected Encoder
     }
 
   public:
-    void SetInputStreams(std::istream& indexStream, std::istream& dataStream)
+    void SetInputStreams(std::istream* indexStream, std::istream* dataStream)
     {
       this->p_indexIStream = indexStream;
       this->p_dataIStream = dataStream;
     }
 
-    void SetOutputStreams(std::ostream& indexStream, std::ostream& dataStream)
+    void SetOutputStreams(std::ostream* indexStream, std::ostream* dataStream)
     {
       this->p_indexOStream = indexStream;
       this->p_dataOStream = dataStream;
     }
 
-    void Read(std::vector<T>& r_elements)
+    bool Read(std::vector<T>& r_elements)
     {
+      this->mode = READ_MODE;
+
       this->handle(0, r_elements.front());
+      return true;
     }
-    void Write(std::vector<T>& r_elements);
+    bool Write(std::vector<T>& r_elements)
+    {
+      this->mode = WRITE_MODE;
+
+      this->handle(0, r_elements.front());
+      return true;
+    }
 };
