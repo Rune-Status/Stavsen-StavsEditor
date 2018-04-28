@@ -6,7 +6,12 @@
 
 int main()
 {
-  ConfigManager<ItemOpHandler, ItemConfig> c;
+  ConfigManager<ItemOpHandler, ItemConfig> ItemManager;
+
+  ItemManager.Open("./bin/obj.idx","./bin/obj.dat");
+
+  //ItemManager.LoadConfigs();
+
 
   return 0;
 }

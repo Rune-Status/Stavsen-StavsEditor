@@ -1,13 +1,14 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>
 
 namespace RsUtil
 {
-  typedef uint8_t RsByte;
-  typedef uint16_t RsShort;
-  typedef uint32_t RsInt;
-  typedef uint64_t RsLong;
+  typedef std::uint8_t RsByte;
+  typedef std::uint16_t RsShort;
+  typedef std::uint32_t RsInt;
+  typedef std::uint64_t RsLong;
 
   static constexpr RsByte StringTerminator = 0x0A;
 
