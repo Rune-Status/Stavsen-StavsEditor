@@ -13,7 +13,7 @@ class Encoder
       {
         RsUtil::FixEndian(data);
 
-        r_ostream.write(reinterpret_cast<char*>(data), sizeof(T));
+        r_ostream.write(reinterpret_cast<char*>(&data), sizeof(T));
       }
 
     void WriteString(std::string& str, std::ostream& r_ostream);
