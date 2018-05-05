@@ -1,4 +1,4 @@
-#include "Encoder.h"
+#include "ArchiveManager/Config/Encoder.h"
 
 void Encoder::WriteString(std::string& str, std::ostream& r_ostream)
 {

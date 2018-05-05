@@ -11,6 +11,13 @@
 #include "RsConfig.h"
 #include "OpHandler.h"
 
+
+#include "Item/ItemOpHandler.h"
+#include "Item/ItemConfig.h"
+
+
+typedef int testint;
+
 template <typename TOpHandler, typename TConfig>
 class ConfigManager
 {
@@ -75,6 +82,11 @@ class ConfigManager
         this->dataOFStream.close();
     }
 
+    std::vector<TConfig>& GetConfigs()
+    {
+      return this->configs;
+    }
+
     bool Open(std::string indexFilepath, std::string dataFilepath)
     {
       this->indexIFStream.open(indexFilepath, std::fstream::binary);
@@ -86,6 +98,7 @@ class ConfigManager
       return this->init();
     }
 
+    //TODO(Stavsen): Maybe add support to only read a range of configs 
     bool LoadConfigs()
     {
       if(!this->indexIFStream.good() || !this->dataIFStream.good())
@@ -113,3 +126,6 @@ class ConfigManager
     }
 };
 
+typedef ConfigManager<ItemOpHandler, ItemConfig> ItemConfigManager;
+//typedef ConfigManager<NpcOpHandler, NpcConfig> NpcConfigManager;
+//typedef ConfigManager<FloOpHandler, FloConfig> FloConfigManager;
