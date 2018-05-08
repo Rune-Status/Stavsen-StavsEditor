@@ -1,11 +1,19 @@
-#include "ItemOpHandler.h"
+#include "ArchiveManager/Config/Item/ItemOpHandler.h"
 
 using namespace RsUtil;
 
-void ItemOpHandler::handle(RsUtil::RsByte op, ItemConfig& item)
+/*
+ * TODO(Stavsen): Maybe document what each opcode indicates better.
+ */
+bool ItemOpHandler::handle(RsUtil::RsByte op, ItemConfig& item)
 {
   switch(op)
   {
+     case 0:
+     {
+       //Indicates end of item 
+       break;
+     }
      case 1:
      {
        this->ReadWrite<RsShort>(item.modelID);
@@ -140,10 +148,149 @@ void ItemOpHandler::handle(RsUtil::RsByte op, ItemConfig& item)
        this->ReadWriteString(item.actions[op-35]);
        break;
      }
+     case 40:
+     {
+       auto read = [&]()
+       {
+         RsByte numColors;
+         this->Read<RsByte>(numColors);
+
+         item.originalModelColors.resize(numColors);
+         item.modifiedModelColors.resize(numColors);
+
+         for(RsByte i = 0; i < numColors; i++)
+         {
+           this->Read<RsShort>(item.originalModelColors[i]);
+           this->Read<RsShort>(item.modifiedModelColors[i]);
+         }
+
+       };
+
+       auto write = [&]()
+       {
+         RsByte numColors = item.originalModelColors.size();
+         this->Write<RsByte>(numColors);
+
+         for(RsByte i = 0; i < numColors; i++)
+         {
+           this->Write<RsShort>(item.originalModelColors[i]);
+           this->Write<RsShort>(item.modifiedModelColors[i]);
+         }
+
+       };
+
+       this->ReadWrite(read,write);
+       break;
+     }
+     case 78:
+     {
+       this->ReadWrite<RsShort>(item.maleEmblem);
+       break;
+     }
+     case 79:
+     {
+       this->ReadWrite<RsShort>(item.femaleEmblem);
+       break;
+     }
+     case 90:
+     {
+       this->ReadWrite<RsShort>(item.maleDialog);
+       break;
+     }
+     case 91:
+     {
+       this->ReadWrite<RsShort>(item.femaleDialog);
+       break;
+     }
+     case 92:
+     {
+       this->ReadWrite<RsShort>(item.maleDialogHat);
+       break;
+     }
+     case 93:
+     {
+       this->ReadWrite<RsShort>(item.femaleDialogHat);
+       break;
+     }
+     case 95:
+     {
+       this->ReadWrite<RsShort>(item.diagonalRotation);
+       break;
+     }
+     case 97:
+     {
+       this->ReadWrite<RsShort>(item.certID);
+       break;
+     }
+     case 98:
+     {
+       this->ReadWrite<RsShort>(item.certTemplateID);
+       break;
+     }
+     case 100:
+     case 101:
+     case 102:
+     case 103:
+     case 104:
+     case 105:
+     case 106:
+     case 107:
+     case 108:
+     case 109:
+     {
+       this->ReadWrite<RsShort>(item.stackIDs[op-100]);
+       this->ReadWrite<RsShort>(item.stackAmounts[op-100]);
+       break;
+     }
+     case 110:
+     {
+       this->ReadWrite<RsShort>(item.modelSizeX);
+       break;
+     }
+     case 111:
+     {
+       this->ReadWrite<RsShort>(item.modelSizeY);
+       break;
+     }
+     case 112:
+     {
+       this->ReadWrite<RsShort>(item.modelSizeZ);
+       break;
+     }
+     case 113:
+     {
+       //May be a signed byte, not sure
+       this->ReadWrite<RsByte>(item.ambience);
+       break;
+     }
+     case 114:
+     {
+       //This may also be incorrect
+       this->ReadWrite<RsByte>(item.contrast);
+       break;
+     }
+     case 115:
+     {
+       this->ReadWrite<RsByte>(item.team);
+       break;
+     }
+     case 116:
+     {
+       this->ReadWrite<RsShort>(item.lendID);
+       break;
+     }
+     case 117:
+     {
+       this->ReadWrite<RsShort>(item.lentItemID);
+       break;
+     }
      default:
      {
-       std::cout << "[" << item.name << "] UNKNOWN OPCODE\n";
+       std::cout << "UNKNOWN OPCODE: " << std::dec << unsigned(op) << '\n';
+       item.Faulty = true;
+       return false;
      }
   }
+  return true;
 }
 

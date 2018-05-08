@@ -38,7 +38,7 @@ class OpHandler : protected Decoder, protected Encoder
     }
 
   protected:
-    virtual void handle(RsUtil::RsByte, T&) = 0; 
+    virtual bool handle(RsUtil::RsByte, T&) = 0; 
 
     template <typename D>
       void Read(D& data)
@@ -101,7 +101,7 @@ class OpHandler : protected Decoder, protected Encoder
         return false;
 
 
-      for(RsUtil::RsShort i = 0; i < 10;i++)
+      for(RsUtil::RsShort i = 0; i < r_configs.size();i++)
       {
         //Set ID
         r_configs[i].ID = i;
@@ -112,29 +112,42 @@ class OpHandler : protected Decoder, protected Encoder
         /*
            New Offset = last offset + last size
            if i = 0 there is no last config
-         */
+           */
         if(i != 0)
-          r_configs[i].Offset = r_configs[i-1].Offset + r_configs[i-1].Size;
-        else
-          r_configs[i].Offset = 2; //First two bytes are the number of configs
+        {
+          r_configs[i].Offset = (RsUtil::RsInt)r_configs[i-1].Offset + (RsUtil::RsInt)r_configs[i-1].Size;
+        }
+        else //First two bytes are the number of configs
+          r_configs[i].Offset = RsUtil::RsInt(2); 
 
-
-        //Move to offset
+        //Move to offset in data stream
         this->p_dataIStream->seekg(r_configs[i].Offset);
 
 
-        //Read first opcode
-        RsUtil::RsByte opCode;
-        this->ReadSome<RsUtil::RsByte>(opCode, *(this->p_dataIStream));
+        //Allocate opcode and set to non-zero
+        RsUtil::RsByte opCode = 1;
 
-        //handle opcode then read another untill opcode 0
+        //loop over opcodes untill OP=0
         while(opCode != 0)
         {
-          this->handle(opCode, r_configs[i]);
+          //Read opcode
           this->ReadSome<RsUtil::RsByte>(opCode, *(this->p_dataIStream));
-        }
 
-        std::cout << r_configs[i].name << '\n';
+          //Store opcode
+          r_configs[i].Opcodes.push_back(opCode);
+
+          
+          //Handle opcode
+          if(!this->handle(opCode, r_configs[i]))
+          {
+            std::cout << "Faulty item #" << std::dec << i << " [" 
+                      << r_configs[i].name << "] at (0x" << std::hex
+                      << this->p_dataIStream->tellg() << ")\n" << std::dec;
+
+            //return false;
+          }
+
+        }
 
       }
 

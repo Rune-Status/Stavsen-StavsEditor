@@ -1,4 +1,4 @@
-#include "Decoder.h"
+#include "ArchiveManager/Config/Decoder.h"
 
 
 void Decoder::ReadString(std::string& str, std::istream& r_istream)
